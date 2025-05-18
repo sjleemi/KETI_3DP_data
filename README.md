@@ -7,7 +7,7 @@ Layer 번호 입력 → 해당 이미지 2장 + 센서값 그래프 + 테이블 
 
 Python , Flask, PostgreSQL (layer 시계열 데이터), MongoDB (산소/온도 센서 상세 데이터), MinIO (이미지), Chart.js (그래프 시각화)
 
-> 파일 구조는 다음과 같습니다. 
+> 파일 구조는 아래와 같습니다. 
 project/
 ├── app.py
 ├── utils/
