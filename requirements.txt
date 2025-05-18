@@ -1,0 +1,6 @@
+psycopg2-binary
+flask
+minio
+pymongo
+Jinja2
+python-dotenv

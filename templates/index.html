@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>3D Printing Layer info</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>3DP Layer INFO</h1>
+
+    <form method="post">
+        <input type="text" name="layer" placeholder="Layer#">
+        <button type="submit">search</button>
+    </form>
+
+    {% if layer_number %}
+        <h2>Layer {{ layer_number }}</h2>
+
+        {% if image_url_1 and image_url_2 %}
+            <h3>Image</h3>
+            <img src="{{ image_url_1 }}" alt="First Shot" style="max-width: 400px; margin-right: 20px;">
+            <img src="{{ image_url_2 }}" alt="Second Shot" style="max-width: 400px;">
+        {% else %}
+            <p> 이미지가 없습니다.</p>
+        {% endif %}
+
+        {% if chart_data %}
+            <h3>RecoatPlatformPosition & RecoatRecoaterPosition</h3>
+            <canvas id="positionChart" width="800" height="300"></canvas>
+           
+            <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+            <script>
+                createMultiLineChart('positionChart', [
+                    {
+                        label: 'RecoatPlatformPosition',
+                        data: {{ RecoatPlatformPosition | tojson }},
+                        borderColor: 'green',
+                        backgroundColor: 'rgba(0,128,0,0.1)',
+                        fill: false,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'RecoatRecoaterPosition',
+                        data: {{ RecoatRecoaterPosition | tojson }},
+                        borderColor: 'orange',
+                        backgroundColor: 'rgba(255,165,0,0.1)',
+                        fill: false,
+                        tension: 0.3
+                    }
+                ]);
+            </script>
+
+            {% if chart_data and chart_data|length > 0 %}
+                <h3> Sensor Data </h3>
+                <table>
+                    <thead>
+                        <tr>
+                            {% for key in chart_data[0].keys() %}
+                                {% if key not in ['RecoatPlatformPosition', 'RecoatRecoaterPosition'] %}
+                                    <th>{{ key }}</th>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in chart_data %}
+                            <tr>
+                                {% for key, value in row.items() %}
+                                    {% if key not in ['RecoatPlatformPosition', 'RecoatRecoaterPosition'] %}
+                                        <td>{{ value }}</td>
+                                    {% endif %}
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+            <form method="GET" action="{{ detail_url }}" style="margin-top: 20px;">
+                <button type="submit">Detail Information</button>
+            </form>
+        {% else %}
+            <p> 데이터가 없습니다.</p>
+        {% endif %}
+    {% endif %}
+
+    
+</body>
+</html>

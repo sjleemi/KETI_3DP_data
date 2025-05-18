@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail Info - {{ layer_key }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Detail Info for {{ layer_key }}</h1>
+
+    <h2>Oxygen Level</h2>
+    <canvas id="oxygenChart" width="800" height="400"></canvas>
+
+    <h2>Temperature Sensor</h2>
+    <canvas id="tempChart" width="800" height="400"></canvas>
+
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+
+    <script>
+        createMultiLineChart('oxygenChart', [
+            {
+                label: 'OxygenHighChamber',
+                data: {{ oxygen_high | tojson }},
+                borderColor: 'blue',
+                backgroundColor: 'rgba(0,0,255,0.1)',
+                fill: false,
+                tension: 0.3
+            },
+            {
+                label: 'OxygenLowChamber',
+                data: {{ oxygen_low | tojson }},
+                borderColor: 'red',
+                backgroundColor: 'rgba(255,0,0,0.1)',
+                fill: false,
+                tension: 0.3
+            }
+        ]);
+
+        createMultiLineChart('tempChart', [
+            {
+                label: 'TemperatureBuildplate (℃)',
+                data: {{ temperature_buildplate | tojson }},
+                borderColor: 'purple',
+                backgroundColor: 'rgba(128,0,128,0.1)',
+                fill: false,
+                tension: 0.3
+            },
+            {
+                label: 'TemperatureChamber (℃)',
+                data: {{ temperature_chamber | tojson }},
+                borderColor: 'orange',
+                backgroundColor: 'rgba(255,165,0,0.1)',
+                fill: false,
+                tension: 0.3
+            }
+        ]);
+    </script>
+
+    
+</body>
+</html>
