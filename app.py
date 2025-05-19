@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, abort
-from utils.data_parsing import load_layer_data, load_detail_data  # ✅ 파일명 반영됨
+from utils.data_parsing import load_layer_data, load_detail_data  
 
 app = Flask(__name__)
 
